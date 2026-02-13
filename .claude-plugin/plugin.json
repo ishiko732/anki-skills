@@ -1,0 +1,11 @@
+{
+  "name": "anki",
+  "description": "Anki flashcard management via AnkiConnect API. Create/manage decks, add flashcards from text/PDF/CSV/Excel, create note templates, view study statistics, and generate high-quality flashcards using spaced repetition best practices.",
+  "version": "0.1.0",
+  "author": {
+    "name": "ishiko"
+  },
+  "license": "GPL-3.0",
+  "keywords": ["anki", "flashcards", "spaced-repetition", "ankiconnect", "study", "learning"],
+  "skills": ["./.agents/skills/anki"]
+}

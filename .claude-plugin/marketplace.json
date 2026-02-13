@@ -1,0 +1,32 @@
+{
+  "name": "anki-skills",
+  "id": "anki-skills",
+  "owner": {
+    "name": "ishiko"
+  },
+  "metadata": {
+    "description": "Anki flashcard management skill for Claude Code — create decks, add cards, generate flashcards from any source, and track study progress via AnkiConnect",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "anki",
+      "source": "./",
+      "description": "Manage Anki flashcards via AnkiConnect HTTP API. Supports deck operations, batch card creation from text/PDF/CSV/Excel, custom note templates, study statistics, and built-in flashcard generation with spaced repetition best practices.",
+      "version": "0.1.0",
+      "author": {
+        "name": "ishiko"
+      },
+      "keywords": [
+        "anki",
+        "flashcards",
+        "spaced-repetition",
+        "ankiconnect",
+        "study",
+        "learning"
+      ],
+      "category": "productivity",
+      "strict": false
+    }
+  ]
+}
