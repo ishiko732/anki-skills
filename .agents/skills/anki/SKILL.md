@@ -44,6 +44,8 @@ Skipping any step (e.g., adding cards without asking for model selection) is a r
 
 ## Helper Script
 
+### macOS / Linux (Bash)
+
 `scripts/anki-connect.sh` wraps `curl` for convenience:
 
 ```bash
@@ -55,6 +57,26 @@ bash scripts/anki-connect.sh version
 bash scripts/anki-connect.sh deckNames
 bash scripts/anki-connect.sh createDeck '{"deck":"MyDeck"}'
 ```
+
+### Windows (PowerShell)
+
+`scripts/anki-connect.ps1` wraps `Invoke-RestMethod` for convenience:
+
+```powershell
+# Basic usage
+pwsh scripts/anki-connect.ps1 <action> [params_json]
+
+# Examples
+pwsh scripts/anki-connect.ps1 version
+pwsh scripts/anki-connect.ps1 deckNames
+pwsh scripts/anki-connect.ps1 createDeck '{"deck":"MyDeck"}'
+```
+
+### Platform Detection
+
+Choose the correct script based on the current OS:
+- **Windows** (`$env:OS -eq 'Windows_NT'` or `os.platform() === 'win32'`): use `anki-connect.ps1`
+- **macOS / Linux**: use `anki-connect.sh`
 
 Override the endpoint with `ANKI_CONNECT_URL` env var (default: `http://127.0.0.1:8765`).
 
