@@ -29,12 +29,12 @@ A Claude Code skill for managing Anki flashcards via [AnkiConnect](https://githu
 
 ```bash
 # Clone the repository
-git clone --recurse-submodules https://github.com/ishiko/anki-skills.git ~/code-remote/anki-skills
+git clone --recurse-submodules https://github.com/ishiko732/anki-skills.git ~/code/anki-skills
 
 # Symlink skills to ~/.agents/skills/
-ln -sfn ~/code-remote/anki-skills/.agents/skills/anki ~/.agents/skills/anki
-ln -sfn ~/code-remote/anki-skills/.agents/skills/pdf  ~/.agents/skills/pdf
-ln -sfn ~/code-remote/anki-skills/.agents/skills/xlsx ~/.agents/skills/xlsx
+ln -sfn ~/code/anki-skills/.agents/skills/anki ~/.agents/skills/anki
+ln -sfn ~/code/anki-skills/.agents/skills/pdf  ~/.agents/skills/pdf
+ln -sfn ~/code/anki-skills/.agents/skills/xlsx ~/.agents/skills/xlsx
 ```
 
 ### Verify
