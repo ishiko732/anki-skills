@@ -12,6 +12,30 @@ description: |
 
 Manage Anki flashcards via [AnkiConnect](https://github.com/FooSoft/anki-connect) HTTP API.
 
+---
+
+## ⛔ MANDATORY: Pre-Add Checklist (READ THIS FIRST)
+
+**You MUST NOT call `addNote` or `addNotes` until ALL steps below are completed. No exceptions. No defaults. No shortcuts.**
+
+**Step 1 — Fetch available models:**
+Call `modelNames` to get the full list of note types from the user's Anki.
+
+**Step 2 — Ask the user to choose a model:**
+Present the available models to the user via `AskUserQuestion` and let them pick one. NEVER default to "Basic" or any other model without explicit user selection.
+
+**Step 3 — Verify field mapping:**
+After the user selects a model, call `modelFieldNames` with that model to inspect its fields. Map the card content to the correct fields and show the mapping to the user for confirmation.
+
+**Step 4 — Confirm deck, model, and tags:**
+Present a final summary of deck name, chosen model, field mapping, and tags. Wait for user approval before proceeding.
+
+**Only after the user explicitly confirms ALL of the above may you call `addNote` or `addNotes`.**
+
+Skipping any step (e.g., adding cards without asking for model selection) is a rule violation.
+
+---
+
 ## Prerequisites
 
 1. **Anki** desktop must be running
@@ -110,6 +134,8 @@ bash scripts/anki-connect.sh createModel '{
 ```
 
 ### Note Operations
+
+> **⛔ STOP: Before using `addNote` or `addNotes`, you MUST complete the Pre-Add Checklist above. Do NOT call these APIs until the user has confirmed model, field mapping, deck, and tags.**
 
 **Add a single note:**
 ```bash
@@ -297,10 +323,7 @@ After user confirms, use `addNotes` to batch-add all cards at once.
 5. Confirm: target deck, note type (model), and tags
 6. Use `addNotes` to batch-add
 
-**Important:** Always confirm the following with the user before adding cards:
-- Target deck name (create if needed)
-- Note type / model (use "Basic" if unspecified)
-- Tags to apply
+**⛔ IMPORTANT: You MUST follow the Pre-Add Checklist (at the top of this document) before adding any cards. This means: fetch models → ask user to choose → verify fields → confirm deck/model/tags. No exceptions.**
 
 ## Workflow Examples
 
@@ -317,12 +340,18 @@ bash scripts/anki-connect.sh getDeckStats '{"decks":["Default"]}'
 1. User provides text content
 2. Apply flashcard generation guide — rewrite, split, generate Q&A pairs
 3. Present table for review
-4. After confirmation:
+4. **Follow Pre-Add Checklist:**
+   a. Fetch models: `bash scripts/anki-connect.sh modelNames`
+   b. Ask user to choose model via `AskUserQuestion`
+   c. Verify fields: `bash scripts/anki-connect.sh modelFieldNames '{"modelName":"<user-chosen-model>"}'`
+   d. Show field mapping to user and confirm
+   e. Confirm deck, model, and tags — present final summary
+5. Only after user confirms all of the above:
 ```bash
 bash scripts/anki-connect.sh addNotes '{
   "notes": [
-    {"deckName":"Default","modelName":"Basic","fields":{"Front":"Q1","Back":"A1"},"tags":["ai-generated"]},
-    {"deckName":"Default","modelName":"Basic","fields":{"Front":"Q2","Back":"A2"},"tags":["ai-generated"]}
+    {"deckName":"<deck>","modelName":"<user-chosen-model>","fields":{"<field1>":"Q1","<field2>":"A1"},"tags":["ai-generated"]},
+    {"deckName":"<deck>","modelName":"<user-chosen-model>","fields":{"<field1>":"Q2","<field2>":"A2"},"tags":["ai-generated"]}
   ]
 }'
 ```
@@ -332,14 +361,16 @@ bash scripts/anki-connect.sh addNotes '{
 1. Use `pdf` skill to extract text
 2. Follow "Flashcard Generation Guide" on extracted text
 3. Present cards for review
-4. Batch-add with `addNotes`
+4. **Follow Pre-Add Checklist** (fetch models → user picks → verify fields → confirm all)
+5. Batch-add with `addNotes`
 
 ### 4. Import Flashcards from CSV/Excel
 
 1. Use `xlsx` skill to parse the file
 2. Map columns to Front/Back or generate cards
 3. Present mapping for review
-4. Batch-add with `addNotes`
+4. **Follow Pre-Add Checklist** (fetch models → user picks → verify fields → confirm all)
+5. Batch-add with `addNotes`
 
 ### 5. View Study Statistics
 
