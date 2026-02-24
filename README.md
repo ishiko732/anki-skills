@@ -25,6 +25,13 @@ A Claude Code skill for managing Anki flashcards via [AnkiConnect](https://githu
 
 ## Installation
 
+### Plugin (Recommended)
+
+```bash
+# Add marketplace
+/plugin marketplace add https://github.com/ishiko732/anki-skills.git
+```
+
 ### Manual
 
 ```bash
@@ -80,15 +87,15 @@ anki-skills/
 
 ## Supported AnkiConnect Actions
 
-| Category | Actions |
-|----------|---------|
-| **Connection** | `version` |
-| **Decks** | `deckNames`, `deckNamesAndIds`, `createDeck`, `getDeckStats` |
-| **Models** | `modelNames`, `createModel` |
-| **Notes** | `addNote`, `addNotes`, `findNotes`, `updateNoteFields` |
-| **Cards** | `findCards`, `cardsInfo` |
+| Category       | Actions                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| **Connection** | `version`                                                                                  |
+| **Decks**      | `deckNames`, `deckNamesAndIds`, `createDeck`, `getDeckStats`                               |
+| **Models**     | `modelNames`, `createModel`                                                                |
+| **Notes**      | `addNote`, `addNotes`, `findNotes`, `updateNoteFields`                                     |
+| **Cards**      | `findCards`, `cardsInfo`                                                                   |
 | **Statistics** | `getNumCardsReviewedToday`, `getNumCardsReviewedByDay`, `cardReviews`, `getReviewsOfCards` |
-| **Batch** | `multi` |
+| **Batch**      | `multi`                                                                                    |
 
 ## Flashcard Generation
 
