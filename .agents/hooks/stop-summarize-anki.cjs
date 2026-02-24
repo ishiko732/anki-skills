@@ -29,12 +29,39 @@ process.stdin.on("end", () => {
     "anki-connect.sh"
   );
 
+  // Detect language from the last assistant message
+  const lastMessage = data.last_assistant_message || "";
+  const cjkPattern = /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af]/g;
+  const cjkMatches = lastMessage.match(cjkPattern) || [];
+  const cjkRatio = lastMessage.length > 0 ? cjkMatches.length / lastMessage.length : 0;
+
+  let detectedLang = "English";
+  if (cjkRatio > 0.1) {
+    // Further distinguish CJK languages
+    const zhPattern = /[\u4e00-\u9fff]/g;
+    const jaPattern = /[\u3040-\u309f\u30a0-\u30ff]/g;
+    const koPattern = /[\uac00-\ud7af]/g;
+    const zhCount = (lastMessage.match(zhPattern) || []).length;
+    const jaCount = (lastMessage.match(jaPattern) || []).length;
+    const koCount = (lastMessage.match(koPattern) || []).length;
+    const maxCjk = Math.max(zhCount, jaCount, koCount);
+    if (maxCjk === jaCount && jaCount > 0) {
+      detectedLang = "Japanese";
+    } else if (maxCjk === koCount && koCount > 0) {
+      detectedLang = "Korean";
+    } else {
+      detectedLang = "Chinese";
+    }
+  }
+
   const reason = `Before stopping, use the **Task tool** to spawn a subAgent (subagent_type: "general-purpose") to handle session summarization and Anki card creation. This keeps the main agent context clean.
 
 Pass the following prompt to the subAgent:
 
 ---
 You are a flashcard generation agent. You have access to the **anki** skill — use it for all Anki operations. Based on the conversation context, do the following:
+
+**Language: Generate all flashcard questions and answers in ${detectedLang}, matching the user's language. Technical terms and code identifiers should remain in their original form.**
 
 1. **Summarize** the key knowledge points from this session — rewrite them in clear, concise language while retaining the original meaning.
 2. **Split** the summary into sections, each focusing on one main point.
