@@ -1,1 +1,0 @@
-../../.agents/hooks/stop-summarize-anki.cjs

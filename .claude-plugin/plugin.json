@@ -8,18 +8,5 @@
   "license": "GPL-3.0",
   "keywords": ["anki", "flashcards", "spaced-repetition", "ankiconnect", "study", "learning"],
   "skills": ["./.agents/skills/anki"],
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/.agents/hooks/stop-summarize-anki.cjs\"",
-            "timeout": 10
-          }
-        ]
-      }
-    ]
-  }
+  "hooks": "./hooks/hooks.json"
 }

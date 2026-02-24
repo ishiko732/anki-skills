@@ -1,0 +1,14 @@
+{
+  "Stop": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "node \"${CLAUDE_PLUGIN_ROOT}/.agents/hooks/stop-summarize-anki.cjs\"",
+          "timeout": 10
+        }
+      ]
+    }
+  ]
+}
