@@ -1,11 +1,6 @@
 ---
 name: anki
-description: |
-  Use this skill when users want to work with Anki flashcards. This includes:
-  creating/managing decks, adding flashcards (from text, PDF, CSV, Excel),
-  creating note templates/models, checking Anki connection status, viewing
-  study statistics and review history, or generating flashcards from any
-  source material using spaced repetition best practices.
+description: "Use this skill when users want to work with Anki flashcards. This includes: creating/managing decks, adding flashcards (from text, PDF, CSV, Excel), creating note templates/models, checking Anki connection status, viewing study statistics and review history, or generating flashcards from any source material using spaced repetition best practices."
 ---
 
 # Anki Skill
