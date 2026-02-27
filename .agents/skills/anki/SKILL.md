@@ -13,6 +13,15 @@ Manage Anki flashcards via [AnkiConnect](https://github.com/FooSoft/anki-connect
 
 **You MUST NOT call `addNote` or `addNotes` until ALL steps below are completed. No exceptions. No defaults. No shortcuts.**
 
+### Agent Mode Exception
+
+When called by the `anki-flashcard-generator` agent (or any automated agent), skip the interactive checklist below. Instead:
+1. Read deck and model from `.claude/anki.json` config (create with defaults `{"deck": "program::claude", "model": "Basic"}` if missing)
+2. Call `modelFieldNames` to verify the configured model's fields
+3. Proceed directly with `addNotes` — no user confirmation needed
+
+### Interactive Mode (User-Initiated)
+
 **Step 1 — Fetch available models:**
 Call `modelNames` to get the full list of note types from the user's Anki.
 
