@@ -75,7 +75,7 @@ process.stdin.on("end", () => {
     }
   }
 
-  const reason = `Before stopping, use the **Task tool** to spawn a subAgent (subagent_type: "anki-flashcard-generator") to handle session summarization and Anki card creation. This keeps the main agent context clean.
+  const reason = `Before stopping, use the **Task tool** to spawn a subAgent (subagent_type: "anki:anki-flashcard-generator") to handle session summarization and Anki card creation. This keeps the main agent context clean.
 
 Pass the following prompt to the subAgent:
 
