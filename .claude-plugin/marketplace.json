@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "anki-skills",
   "id": "anki-skills",
   "owner": {
@@ -25,8 +26,13 @@
         "study",
         "learning"
       ],
-      "category": "productivity",
-      "strict": false
+      "strict": false,
+      "skills": [
+        "./.agents/skills/anki"
+      ],
+      "agents": [
+        "./agents/anki-flashcard-generator.md"
+      ]
     }
   ]
 }
