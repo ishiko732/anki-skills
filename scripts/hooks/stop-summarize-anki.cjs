@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 // Stop hook: spawn a subAgent to summarize the session and create Anki flashcards
 // On first Stop, block and instruct main agent to launch a subAgent
-// On second Stop (stop_hook_active=true), allow stopping
+// On subsequent Stops, allow stopping (via stop_hook_active or marker file)
 
 const path = require("node:path");
+const fs = require("node:fs");
+const os = require("node:os");
 
 let input = "";
 process.stdin.setEncoding("utf8");
@@ -13,8 +15,27 @@ process.stdin.on("data", (chunk) => {
 process.stdin.on("end", () => {
   const data = JSON.parse(input);
 
-  // If the hook already ran once (stop_hook_active=true), allow stopping
-  if (data.stop_hook_active) {
+  // Use session_id-based marker file as fallback for stop_hook_active
+  const markerFile = path.join(
+    os.tmpdir(),
+    `anki-stop-hook-${data.session_id || "unknown"}.marker`
+  );
+
+  // If stop_hook_active is true OR marker file exists, allow stopping
+  if (data.stop_hook_active || fs.existsSync(markerFile)) {
+    try {
+      fs.unlinkSync(markerFile);
+    } catch (_) {
+      // ignore cleanup errors
+    }
+    process.exit(0);
+  }
+
+  // Create marker file to track that we've blocked once
+  try {
+    fs.writeFileSync(markerFile, String(Date.now()));
+  } catch (_) {
+    // If we can't write the marker, allow stopping to avoid infinite blocking
     process.exit(0);
   }
 
