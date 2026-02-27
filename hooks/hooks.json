@@ -3,14 +3,14 @@
   "hooks": {
     "Stop": [
       {
-        "matcher": "*",
         "hooks": [
           {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/hooks/stop-summarize-anki.cjs\""
+            "type": "agent",
+            "prompt": "You are a flashcard generation agent. Your job is to read the session transcript, extract key knowledge points, and create Anki flashcards.\n\nHook input: $ARGUMENTS\n\n## Instructions\n\n### Step 0: Check skip conditions\n- Parse the hook input JSON above. It contains `transcript_path`, `stop_hook_active`, `last_assistant_message`, `session_id`, etc.\n- If the transcript is too short (less than ~5 meaningful exchanges) or contains only greetings/trivial content, skip card generation entirely. Just return.\n- If `stop_hook_active` is true, it means this hook has already run — skip and return immediately.\n\n### Step 1: Read the transcript\n- Use the Read tool to read the file at the `transcript_path` from the hook input.\n- The transcript is a JSONL file. Each line is a JSON object representing a conversation turn.\n- Focus on extracting **substantive technical knowledge** — ignore greetings, confirmations, and tool call metadata.\n\n### Step 2: Detect language\n- Analyze the conversation content to detect the primary language used.\n- If the conversation is mostly in Chinese, generate cards in Chinese.\n- If mostly in Japanese, generate in Japanese.\n- If mostly in English, generate in English.\n- Technical terms and code identifiers should always remain in their original form regardless of language.\n\n### Step 3: Generate flashcards\nFollow the Dead Sea flashcard rules:\n- Keep flashcards simple, clear, and focused on the most important information\n- Questions must be specific and unambiguous\n- Use simple and direct language\n- Each answer should contain only a single key fact/name/concept/term\n- Avoid yes/no questions — use what/where/why/how\n- Do not repeat the question stem in the answer\n- For complex topics, split into multiple cards each covering one concept\n- Aim for 3-8 cards per session (quality over quantity)\n\n### Step 4: Add cards to Anki via AnkiConnect\nUse the Bash tool to interact with AnkiConnect (localhost:8765).\n\n**4a. Check if Anki is running:**\n```bash\ncurl -s -m 5 http://localhost:8765 -X POST -d '{\"action\":\"version\",\"version\":6}' || echo 'ANKI_NOT_RUNNING'\n```\nIf Anki is not running or curl fails, skip all card operations and return.\n\n**4b. Ensure deck exists:**\n```bash\ncurl -s http://localhost:8765 -X POST -d '{\"action\":\"createDeck\",\"version\":6,\"params\":{\"deck\":\"program::claude\"}}'\n```\n\n**4c. Check for duplicates:**\n```bash\ncurl -s http://localhost:8765 -X POST -d '{\"action\":\"findCards\",\"version\":6,\"params\":{\"query\":\"deck:program::claude\"}}'\n```\nThen get card info to compare against generated cards. Skip any card whose question is semantically similar to an existing one.\n\n**4d. Add new cards:**\nFor each non-duplicate card, use addNote:\n```bash\ncurl -s http://localhost:8765 -X POST -d '{\"action\":\"addNote\",\"version\":6,\"params\":{\"note\":{\"deckName\":\"program::claude\",\"modelName\":\"Basic\",\"fields\":{\"Front\":\"<question>\",\"Back\":\"<answer>\"},\"options\":{\"allowDuplicate\":false}}}}'\n```\n\n### Step 5: Return\nAfter completing (or skipping), just finish. Do not block the stop process.",
+            "timeout": 120
           }
         ],
-        "description": "Summarize session knowledge and create Anki flashcards"
+        "description": "Summarize session and create Anki flashcards"
       }
     ]
   }
