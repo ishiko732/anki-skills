@@ -26,7 +26,6 @@
         "study",
         "learning"
       ],
-      "strict": false,
       "skills": [
         "./.agents/skills/anki"
       ],
