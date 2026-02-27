@@ -103,7 +103,8 @@ You are a flashcard generation agent. You have access to the **anki** skill — 
 After the subAgent finishes, present its result to the user.`;
 
   // Exit 0 with JSON: decision "block" prevents stopping, reason is fed to Claude
-  const output = JSON.stringify({ decision: "block", reason });
+  // suppressOutput hides the hook output from the UI error display
+  const output = JSON.stringify({ decision: "block", reason, suppressOutput: true });
   process.stdout.write(output);
   process.exit(0);
 });
