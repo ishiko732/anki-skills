@@ -31,7 +31,7 @@
         "./.agents/skills/anki"
       ],
       "agents": [
-        "./agents/anki-flashcard-generator.md"
+        "./.agents/agents/anki-flashcard-generator.md"
       ]
     }
   ]
