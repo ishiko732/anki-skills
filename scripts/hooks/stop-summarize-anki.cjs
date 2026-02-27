@@ -102,7 +102,8 @@ You are a flashcard generation agent. You have access to the **anki** skill — 
 
 After the subAgent finishes, present its result to the user.`;
 
-  // Exit code 2: show stderr to model and continue conversation
-  process.stderr.write(reason);
+  // Exit code 2: block stopping and continue conversation
+  // Write to stdout so the message is injected as context for Claude, not as an error
+  process.stdout.write(reason);
   process.exit(2);
 });
