@@ -28,5 +28,12 @@
       "category": "productivity",
       "strict": false
     }
+  ],
+  "agents": [
+    {
+      "name": "anki-flashcard-generator",
+      "source": ".agents/agents/anki-flashcard-generator.md",
+      "description": "Automatically generate Anki flashcards from session knowledge using spaced repetition best practices and Dead Sea rules"
+    }
   ]
 }
