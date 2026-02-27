@@ -1,17 +1,9 @@
 #!/usr/bin/env node
 // Stop hook: spawn a subAgent to summarize the session and create Anki flashcards
 // On first Stop, block and instruct main agent to launch a subAgent
-// On second Stop, detect marker file and allow stopping
+// On second Stop (stop_hook_active=true), allow stopping
 
 const path = require("node:path");
-const fs = require("node:fs");
-const os = require("node:os");
-
-// Use parent PID to create a session-specific marker file
-const markerFile = path.join(
-  os.tmpdir(),
-  `anki-stop-hook-${process.ppid}.marker`
-);
 
 let input = "";
 process.stdin.setEncoding("utf8");
@@ -21,21 +13,8 @@ process.stdin.on("data", (chunk) => {
 process.stdin.on("end", () => {
   const data = JSON.parse(input);
 
-  // If the hook already ran once (marker exists), allow stopping
-  if (fs.existsSync(markerFile)) {
-    try {
-      fs.unlinkSync(markerFile);
-    } catch (_) {
-      // ignore cleanup errors
-    }
-    process.exit(0);
-  }
-
-  // Create marker file to track that we've blocked once
-  try {
-    fs.writeFileSync(markerFile, String(Date.now()));
-  } catch (_) {
-    // If we can't write the marker, allow stopping to avoid infinite blocking
+  // If the hook already ran once (stop_hook_active=true), allow stopping
+  if (data.stop_hook_active) {
     process.exit(0);
   }
 
@@ -102,8 +81,8 @@ You are a flashcard generation agent. You have access to the **anki** skill — 
 
 After the subAgent finishes, present its result to the user.`;
 
-  // Exit code 2: block stopping and continue conversation
-  // Write to stdout so the message is injected as context for Claude, not as an error
-  process.stdout.write(reason);
-  process.exit(2);
+  // Exit 0 with JSON: decision "block" prevents stopping, reason is fed to Claude
+  const output = JSON.stringify({ decision: "block", reason });
+  process.stdout.write(output);
+  process.exit(0);
 });
