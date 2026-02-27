@@ -8,5 +8,5 @@
   "license": "GPL-3.0",
   "keywords": ["anki", "flashcards", "spaced-repetition", "ankiconnect", "study", "learning"],
   "skills": ["./.agents/skills/anki"],
-  "agents": ["./.agents/agents/anki-flashcard-generator.md"]
+  "agents": ["./agents/anki-flashcard-generator.md"]
 }
