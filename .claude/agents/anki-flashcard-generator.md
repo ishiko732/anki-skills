@@ -1,1 +1,0 @@
-../../.agents/agents/anki-flashcard-generator.md
